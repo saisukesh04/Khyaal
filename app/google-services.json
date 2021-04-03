@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "99249664900",
+    "project_id": "khyaal-abc",
+    "storage_bucket": "khyaal-abc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99249664900:android:6e2fec0508fac2a7b063d1",
+        "android_client_info": {
+          "package_name": "com.undamped.khyaal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99249664900-v5ph2obd3gavjoj8fv0mh5oktafkct19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdx2qvMRd6hJrTWJPrSBSNdj14S2ioMPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99249664900-v5ph2obd3gavjoj8fv0mh5oktafkct19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
