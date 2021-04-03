@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnCompleteListener(RegisterActivity.this, task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegisterActivity.this, "Registration successful. Logging in", Toast.LENGTH_LONG).show();
-                                storeUserDataToDatabase(name, regNo);
+                                storeDoctorDataToDatabase(name, regNo, firebaseAuth.getCurrentUser().getUid());
                             } else {
                                 regProgressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterActivity.this, "Registration failed. Try again", Toast.LENGTH_LONG).show();
@@ -85,10 +85,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void storeUserDataToDatabase(String name, String regNo) {
+    private void storeDoctorDataToDatabase(String name, String regNo, String uid) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Doctors");
         Map<String, String> userMap = new HashMap<>();
         userMap.put("Name", name);
+        userMap.put("Uid", uid);
         mRef.child(regNo).setValue(userMap).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
