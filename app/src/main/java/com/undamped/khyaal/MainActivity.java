@@ -1,16 +1,24 @@
 package com.undamped.khyaal;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar2) Toolbar main_toolbar;
 
     private FirebaseAuth mAuth;
+    public static String NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
+
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users");
+        mRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                NAME = snapshot.child("Name").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Error in retrieving data", Toast.LENGTH_LONG).show();
+                Log.e("Error: MainActivity", error.getMessage());
+            }
+        });
 
         scanFloatingBtn.setOnClickListener(view -> {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new ScanFragment()).commit();

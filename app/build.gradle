@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.undamped.khyaal"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -63,5 +63,11 @@ dependencies {
     // Notifications
 //    implementation "com.android.support:support-compat:28.0.0"
 
+    //Circular image and cropper
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
+    //qr code generator and scanner
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0@aar'
 }
