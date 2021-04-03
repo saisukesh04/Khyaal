@@ -2,6 +2,7 @@ package com.undamped.khyaal;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
 
@@ -11,11 +12,17 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -30,9 +37,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.add_event_photo) CardView add_event_photo;
-    @BindView(R.id.prescriptionImageView)
-    ImageView prescriptionImageView;
+    @BindView(R.id.bottomNavigation) BottomNavigationView bottomNavigation;
+    @BindView(R.id.nav_host_frame) FrameLayout nav_host_frame;
+    @BindView(R.id.scanFloatingBtn) FloatingActionButton scanFloatingBtn;
+    @BindView(R.id.toolbar2) Toolbar main_toolbar;
+
 
     final public static int IMAGE_CODE = 1;
     private Uri imageUri; // URI of the image to be processed
@@ -48,9 +57,29 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
 
-        add_event_photo.setOnClickListener(view -> {
-            selectImage();
+        scanFloatingBtn.setOnClickListener(view -> {
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new ScanFragment()).commit();
         });
+
+        bottomNavigation.setSelectedItemId(R.id.action_medicines);
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new MedicineFragment()).commit();
+
+        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_profile:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new ProfileFragment()).commit();
+                    return true;
+
+                case R.id.action_medicines:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new MedicineFragment()).commit();
+                    return true;
+            }
+            return false;
+        });
+
+//        add_event_photo.setOnClickListener(view -> {
+//            selectImage();
+//        });
     }
 
     @Override
@@ -71,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, IMAGE_CODE);
     }
-
+/*
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -165,9 +194,10 @@ public class MainActivity extends AppCompatActivity {
             // notificationId is a unique int for each notification that you must define
             notificationManager.notify(notificationId, builder.build());
 
-            */
+//            /
 
 
         }
     }
+    */
 }
