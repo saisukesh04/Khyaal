@@ -1,39 +1,19 @@
 package com.undamped.khyaal;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.NotificationCompat;
 
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomappbar.BottomAppBar;
+import android.os.Bundle;
+import android.widget.FrameLayout;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.text.Text;
-import com.google.mlkit.vision.text.TextRecognition;
-import com.google.mlkit.vision.text.TextRecognizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +21,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.nav_host_frame) FrameLayout nav_host_frame;
     @BindView(R.id.scanFloatingBtn) FloatingActionButton scanFloatingBtn;
     @BindView(R.id.toolbar2) Toolbar main_toolbar;
-
-
-    final public static int IMAGE_CODE = 1;
-    private Uri imageUri; // URI of the image to be processed
-    private ArrayList<String> prescription;
 
     private FirebaseAuth mAuth;
 
@@ -76,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-
-//        add_event_photo.setOnClickListener(view -> {
-//            selectImage();
-//        });
     }
 
     @Override
@@ -94,30 +65,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void selectImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, IMAGE_CODE);
-    }
+
 /*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == IMAGE_CODE && resultCode == RESULT_OK && data != null) {
-            imageUri = data.getData();
-            Glide.with(getApplicationContext()).load(imageUri).into(prescriptionImageView);
-            try {
-                processImage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "Please select a file", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -150,36 +99,6 @@ public class MainActivity extends AppCompatActivity {
 //                .setAutoCancel(false);
     }
 
-
-    private void processImage() throws IOException {
-        prescription = new ArrayList<>();
-        TextRecognizer recognizer = TextRecognition.getClient();
-        InputImage inputImage = InputImage.fromFilePath(getApplicationContext(), imageUri);
-        Task<Text> result = recognizer.process(inputImage) // To be replaced with data?
-                .addOnSuccessListener(visionText -> {
-                    // Task completed successfully
-                    Log.e("Info", "Scanned");
-                    for (Text.TextBlock block : visionText.getTextBlocks()) {
-                        Rect boundingBox = block.getBoundingBox();
-                        Point[] cornerPoints = block.getCornerPoints();
-                        String text = block.getText();
-                        Log.e("Info", text);
-                        prescription.add(text);
-                        //for (Text.Line line: block.getLines()) {
-                        // ...
-                        //  for (Text.Element element: line.getElements()) {
-                        // ...
-                        //}
-                        //}
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Task failed with an exception
-                    Log.e("Error", e.getMessage());
-                });
-// [END run_detector]
-    }
-
     private void processTextBlock() {
         ArrayList<String> toBeNotified = this.prescription;
         for (String s : toBeNotified) {
@@ -193,9 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
             // notificationId is a unique int for each notification that you must define
             notificationManager.notify(notificationId, builder.build());
-
-//            /
-
 
         }
     }

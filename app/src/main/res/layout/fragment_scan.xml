@@ -35,12 +35,32 @@
 
         <ImageView
             android:id="@+id/prescriptionImageView"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_gravity="center"
             android:padding="28dp"
             android:src="@drawable/add_photo" />
 
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/process_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Scan Image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_photo" />
+
+    <TextView
+        android:id="@+id/imageinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
