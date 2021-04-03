@@ -70,4 +70,8 @@ dependencies {
     //qr code generator and scanner
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0@aar'
+
+    //Room SQL
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 }
