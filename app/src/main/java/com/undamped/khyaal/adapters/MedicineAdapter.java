@@ -16,11 +16,12 @@ import java.util.List;
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHolder> {
 
     private Context context;
-    List<String> medicines, doses;
+    List<String> medicines, doses, duration;
 
-    public MedicineAdapter(List<String> medicines, List<String> doses) {
+    public MedicineAdapter(List<String> medicines, List<String> doses, List<String> duration) {
         this.medicines = medicines;
         this.doses = doses;
+        this.duration = duration;
     }
 
     @NonNull
@@ -34,9 +35,8 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.medicine_name.setText(medicines.get(position));
-        String[] dose_days = doses.get(position).split("x");
-        holder.dosage_text.setText(dose_days[0].trim());
-        holder.duration_days.setText(dose_days[1].trim());
+        holder.dosage_text.setText(doses.get(position));
+        holder.duration_days.setText(duration.get(position));
     }
 
     @Override

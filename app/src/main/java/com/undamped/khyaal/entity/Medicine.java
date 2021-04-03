@@ -14,6 +14,9 @@ public class Medicine {
     private boolean morning, afternoon, evening;
 
     public Medicine() {
+        morning = false;
+        afternoon = false;
+        evening = false;
     }
 
     public long getPrimary_key() {
