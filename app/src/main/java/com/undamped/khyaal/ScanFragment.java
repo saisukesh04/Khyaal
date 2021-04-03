@@ -1,14 +1,14 @@
 package com.undamped.khyaal;
 
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,13 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +32,7 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
+import com.undamped.khyaal.adapters.MedicineAdapter;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,12 +41,13 @@ public class ScanFragment extends Fragment {
     @BindView(R.id.process_image) Button process_image;
     @BindView(R.id.add_event_photo) CardView add_event_photo;
     @BindView(R.id.prescriptionImageView) ImageView prescriptionImageView;
-    @BindView(R.id.imageinfo) TextView imageinfo;
+    @BindView(R.id.scannedMedView) RecyclerView scannedMedView;
+    @BindView(R.id.confirmMedicineBtn) Button confirmMedicineBtn;
 
     final public static int IMAGE_CODE = 1;
     private Uri imageUri;                           // URI of the image to be processed
-    private ArrayList<String> prescription;
-    String scanText;
+    private ArrayList<String> medicines, dosages;
+    MedicineAdapter mAdapter;
 
     public ScanFragment() {
     }
@@ -56,12 +58,12 @@ public class ScanFragment extends Fragment {
 
         ButterKnife.bind(this, root);
 
-        add_event_photo.setOnClickListener(view -> {
-            selectImage();
-        });
+        scannedMedView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        add_event_photo.setOnClickListener(view -> selectImage());
 
         process_image.setOnClickListener(view -> {
-            if(imageUri != null){
+            if (imageUri != null) {
                 try {
                     processImage();
                 } catch (IOException e) {
@@ -69,6 +71,10 @@ public class ScanFragment extends Fragment {
                 }
             }
         });
+
+        confirmMedicineBtn.setOnClickListener(view ->
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new MedicineFragment()).commit()
+        );
 
         return root;
     }
@@ -81,26 +87,25 @@ public class ScanFragment extends Fragment {
     }
 
     private void processImage() throws IOException {
-        scanText = "";
-        prescription = new ArrayList<>();
+        medicines = new ArrayList<>();
+        dosages = new ArrayList<>();
         TextRecognizer recognizer = TextRecognition.getClient();
         InputImage inputImage = InputImage.fromFilePath(getContext(), imageUri);
         Task<Text> result = recognizer.process(inputImage).addOnSuccessListener(visionText -> {     // Task completed successfully
-            for (Text.TextBlock block : visionText.getTextBlocks()) {
-                Rect boundingBox = block.getBoundingBox();
-                Point[] cornerPoints = block.getCornerPoints();
-                String text = block.getText();
-                scanText += text;
-                Log.e("Info", text);
-                prescription.add(text);
-                //for (Text.Line line: block.getLines()) {
-                // ...
-                //  for (Text.Element element: line.getElements()) {
-                // ...
-                //}
-                //}
+            Log.e("Ifno", visionText.getTextBlocks().size() + " Size");
+            List<Text.TextBlock> blocks = visionText.getTextBlocks();
+            for (int i = 0; i < blocks.size(); i += 2) {
+//            for (Text.TextBlock block : visionText.getTextBlocks()) {
+//                Rect boundingBox = block.getBoundingBox();
+//                Point[] cornerPoints = block.getCornerPoints();
+                medicines.add(blocks.get(i).getText());
+                dosages.add(blocks.get(i + 1).getText());
+                Log.e("Medicine " + i / 2, blocks.get(i).getText() + ", dose: " + blocks.get(i + 1).getText());
             }
-            imageinfo.setText(scanText);
+            mAdapter = new MedicineAdapter(medicines, dosages);
+            scannedMedView.setItemViewCacheSize(medicines.size());
+            scannedMedView.setAdapter(mAdapter);
+            confirmMedicineBtn.setEnabled(true);
         }).addOnFailureListener(e -> {                      // Task failed with an exception
             Log.e("Error", e.getMessage());
         });                                                 // [END run_detector]

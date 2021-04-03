@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/medicine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:text="Dolo 650mg" />
+
+        <EditText
+            android:id="@+id/dosage_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:text="1-1-1" />
+
+        <EditText
+            android:id="@+id/duration_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_weight="2"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:text="4" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
