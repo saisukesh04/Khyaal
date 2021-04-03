@@ -127,7 +127,7 @@
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +149,7 @@
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -199,6 +199,7 @@
         android:text="Login"
         android:textColor="@color/hyperlink"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/registerBtn" />
 
@@ -209,6 +210,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:indeterminate="true"
+        android:indeterminateTint="@color/yellow_brown"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
