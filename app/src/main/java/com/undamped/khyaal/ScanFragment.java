@@ -1,7 +1,12 @@
 package com.undamped.khyaal;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,6 +27,7 @@ import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,11 +39,13 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.undamped.khyaal.adapters.MedicineAdapter;
+import com.undamped.khyaal.broadcast.ReminderBroadcast;
 import com.undamped.khyaal.database.MedDao;
 import com.undamped.khyaal.database.MedDatabase;
 import com.undamped.khyaal.entity.Medicine;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ALARM_SERVICE;
 
 public class ScanFragment extends Fragment {
 
@@ -52,6 +60,8 @@ public class ScanFragment extends Fragment {
     private ArrayList<String> medicines, dosage, duration;
     MedicineAdapter mAdapter;
 
+    private int count;
+
     public ScanFragment() {
     }
 
@@ -60,6 +70,8 @@ public class ScanFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_scan, container, false);
 
         ButterKnife.bind(this, root);
+        createNotificationChannel();
+        count = 0;
 
         scannedMedView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -97,6 +109,58 @@ public class ScanFragment extends Fragment {
             if (dose.charAt(4) == '1')
                 medicine.setEvening(true);
             medDb.insertMed(medicine);
+
+            createNotification(medicine);
+        }
+        Log.e("Count of Notifications", count +" times");
+    }
+
+    private void createNotification(Medicine medicine) {
+        Intent intent = new Intent(getContext(), ReminderBroadcast.class);
+        intent.putExtra("MedName", medicine.getName());
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        for (int i=0;i<medicine.getDays();i++) {
+            if(medicine.isMorning()) {
+                count++;
+                calendar.set(Calendar.HOUR_OF_DAY, 9);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), (int) System.currentTimeMillis(), intent, 0);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            if(medicine.isAfternoon()){
+                count++;
+                calendar.set(Calendar.HOUR_OF_DAY, 13);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), (int) System.currentTimeMillis(), intent, 0);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            if(medicine.isEvening()){
+                count++;
+                calendar.set(Calendar.HOUR_OF_DAY, 19);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), (int) System.currentTimeMillis(), intent, 0);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            calendar.add(Calendar.DATE, 1);
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "ReminderChannel";
+            String description = "Channel for reminder";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("notifyUs", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 

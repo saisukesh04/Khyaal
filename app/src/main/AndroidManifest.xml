@@ -12,6 +12,9 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.Khyaal">
+
+        <receiver android:name=".broadcast.ReminderBroadcast"
+            android:enabled="true"/>
         <activity
             android:name=".RegisterActivity"
             android:screenOrientation="portrait" />
