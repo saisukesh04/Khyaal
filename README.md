@@ -2,6 +2,10 @@
 
 <b>Your medical friend</b>
 
+## Demo
+
+You can find a short demo here: [YouTube Video](https://youtu.be/yOQAZQm1IU0)
+
 
 ## Screenshots
 
