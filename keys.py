@@ -1,7 +1,0 @@
-#Client Secret: eHhmEzWZXSRrv6Q8BeuNjTGVrCmEJHnH
-#Bot Token: ODI3ODc4MjI2NjI5ODg2MDEz.YGhbrg.PXglJB3jkkWQiYhK1gI09Y0Ex7U
-
-ID = '50bd23fb'
-APP_KEY = 'ae21260423fe2b2686075b502cc849d6'
-botToken = "ODI3ODc4MjI2NjI5ODg2MDEz.YGhbrg.PXglJB3jkkWQiYhK1gI09Y0Ex7U"
-spoonacular_api_key = "773f917b47714d39975da48a90f65912"
