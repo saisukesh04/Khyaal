@@ -11,6 +11,7 @@ You can find a short demo here: [YouTube Video](https://youtu.be/yOQAZQm1IU0)
 
 Nothing says a lot than screenshots.
 
+<a href="https://github.com/saisukesh04/Khyaal/tree/master/website/screentshots">Check them out here</a>
 
 ## Technologies used
 
