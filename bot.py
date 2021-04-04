@@ -22,9 +22,9 @@ async def ping(ctx):
     await ctx.send(f'Pong! Latency = {client.latency * 1000} ms')
 
 @client.command()
-"""
-Helper function to see if the bot is working, and to send a plaintext message
-"""
+
+#Helper function to see if the bot is working, and to send a plaintext message
+
 async def hi(ctx):
     await ctx.send(f'Hi!')
 
@@ -41,9 +41,9 @@ async def test(ctx, arg1, arg2):
     await ctx.send(f'{y},\n {k}')
     
 @client.command()
-"""
-Helper function to enbed an image
-"""
+
+#Helper function to enbed an image
+
 async def randomimage(ctx):
    e = discord.Embed(title="Your title here", description="Your desc here")
    e.set_image(url="https://i.imgur.com/SJgskbM.jpg")
@@ -64,5 +64,15 @@ async def getrecipes(ctx, listOfIng):
         e.set_image(url=x[i]['image'])
         await ctx.send("Recipe {}".format(str(i+1)),embed=e)
 
+@client.command()
+async def addrecipe(ctx,desc):
+    l = desc.split(':')
+    nameOfItem = l[0]
+    listOfIng = l[1]
+    url = 'http://127.0.0.1:8000/heroes/'
+    postDict = {'name':nameOfItem,'ingredients':listOfIng}
+    req = requests.post(url,json=postDict)
+    print(req.status_code)
+    await ctx.send(f'New Recipe by {ctx.message.author.mention} added \n \n \n \n Do check out {url} for more')
 
 client.run(keys.botToken)
