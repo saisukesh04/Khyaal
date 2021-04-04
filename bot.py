@@ -28,17 +28,18 @@ async def ping(ctx):
 async def hi(ctx):
     await ctx.send(f'Hi!')
 
+# command to get nutrient content of two space seperated food items
 @client.command()
-async def test(ctx, arg1, arg2):
+async def nutrients(ctx, arg1, arg2):
     url1 = 'https://api.edamam.com/api/food-database/v2/parser?ingr={}&app_id={}&app_key={}'.format(arg1,keys.ID,keys.APP_KEY)
     url2 = 'https://api.edamam.com/api/food-database/v2/parser?ingr={}&app_id={}&app_key={}'.format(arg2,keys.ID,keys.APP_KEY)
-    print(requests.get(url1).status_code)
-    print(requests.get(url2).text)
+    # print(requests.get(url1).status_code)
+    # print(requests.get(url2).text)
     x = requests.get(url2).json()
     z = requests.get(url1).json()
-    y = x['parsed'][0]['food']['nutrients']
-    k = z['parsed'][0]['food']['nutrients']
-    await ctx.send(f'{y},\n {k}')
+    y = x['hints'][0]['food']['nutrients']
+    k = z['hints'][0]['food']['nutrients']
+    await ctx.send(f'{arg1} : {y}\n {arg2} : {k}')
     
 @client.command()
 
