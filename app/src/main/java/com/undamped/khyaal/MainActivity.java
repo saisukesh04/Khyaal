@@ -19,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.undamped.khyaal.database.MedDao;
+import com.undamped.khyaal.database.MedDatabase;
+import com.undamped.khyaal.entity.Medicine;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,11 +75,31 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            MedDao medDao = MedDatabase.getInstance(MainActivity.this).medDao();
+
             DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users");
             mRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     NAME = snapshot.child("Name").getValue().toString();
+                    for(DataSnapshot snap : snapshot.child("Medicines").getChildren()){
+                        if(snap.exists()) {
+                            char[] dose = snap.child("dose").getValue().toString().toCharArray();
+                            Medicine med = new Medicine();
+                            med.setName(snap.child("name").getValue().toString());
+                            med.setDays(Integer.parseInt(snap.child("days").getValue().toString().replaceAll("[^0-9]", "")));
+                            if(dose[0] == '1')
+                                med.setMorning(true);
+                            if(dose[2] == '1')
+                                med.setAfternoon(true);
+                            if(dose[4] == '1')
+                                med.setEvening(true);
+
+                            medDao.insertMed(med);
+                        }
+                    }
+                    removeTheNewMeds();
+                    Toast.makeText(MainActivity.this, "New Medicines added", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -88,55 +111,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-/*
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            CharSequence name = getString(R.string.channel_name);
-//            String description = getString(R.string.channel_description);
-//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-//            channel.setDescription(description);
-//            // Register the channel with the system; you can't change the importance
-//            // or other notification behaviors after this
-//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
+    private void removeTheNewMeds() {
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users");
+        mRef.child(mAuth.getCurrentUser().getUid()).child("Medicines").removeValue();
     }
-
-    private void setTapAction() {
-        // Create an explicit intent for an Activity in your app
-//        Intent intent = new Intent(this, AlertDetails.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.notification_icon)
-//                .setContentTitle("My notification")
-//                .setContentText("Hello World!")
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                // Set the intent that will fire when the user taps the notification
-//                .setContentIntent(pendingIntent)
-//                .setAutoCancel(false);
-    }
-
-    private void processTextBlock() {
-        ArrayList<String> toBeNotified = this.prescription;
-        for (String s : toBeNotified) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "0")
-                    .setSmallIcon(R.drawable.taking_care)
-                    .setContentTitle("Notification boss")
-                    .setContentText(s)
-                    .setPriority(NotificationCompat.PRIORITY_MAX);
-            /*
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-            // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(notificationId, builder.build());
-
-        }
-    }
-    */
 }
