@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.scan_barcode) ImageView scan_barcode;
+    @BindView(R.id.logoutBtn) ImageView logoutBtn;
     @BindView(R.id.fetchBtn) Button fetchBtn;
     @BindView(R.id.constraintLayout) ConstraintLayout constraintLayout;
     @BindView(R.id.patientID) EditText patientID;
@@ -119,8 +120,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 });
-
             }
+        });
+
+        logoutBtn.setOnClickListener(view -> {
+            mAuth.signOut();
+            Snackbar.make(view, "Successfully Signed out", Snackbar.LENGTH_LONG).show();
+            Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
+            logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(logoutIntent);
+            finish();
         });
     }
 

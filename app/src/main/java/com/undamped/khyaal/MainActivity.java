@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     public static String NAME;
+    private boolean changesMed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             MedDao medDao = MedDatabase.getInstance(MainActivity.this).medDao();
+            changesMed = false;
 
             DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users");
             mRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     NAME = snapshot.child("Name").getValue().toString();
                     for(DataSnapshot snap : snapshot.child("Medicines").getChildren()){
                         if(snap.exists()) {
+                            changesMed = true;
                             char[] dose = snap.child("dose").getValue().toString().toCharArray();
                             Medicine med = new Medicine();
                             med.setName(snap.child("name").getValue().toString());
@@ -99,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     removeTheNewMeds();
-                    Toast.makeText(MainActivity.this, "New Medicines added", Toast.LENGTH_LONG).show();
+                    if(changesMed)
+                        Toast.makeText(MainActivity.this, "New Medicines added", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
