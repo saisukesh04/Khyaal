@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +33,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        Medicine med = medicines.get(position);
+        holder.medicineDays.setText(med.getDays() + " days");
+        holder.medicineDose.setText(med.getDosage());
+        holder.medicineName.setText(med.getName());
     }
 
     @Override
@@ -41,8 +45,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView medicineName, medicineDose, medicineDays;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            medicineName = itemView.findViewById(R.id.medicineName);
+            medicineDose = itemView.findViewById(R.id.medicineDose);
+            medicineDays = itemView.findViewById(R.id.medicineDays);
         }
     }
 }

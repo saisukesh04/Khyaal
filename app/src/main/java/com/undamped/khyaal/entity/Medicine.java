@@ -19,6 +19,17 @@ public class Medicine {
         evening = false;
     }
 
+    public String getDosage(){
+        char[] dose = {'0','-','0','-','0'};
+        if(morning)
+            dose[0] = '1';
+        if (afternoon)
+            dose[2] = '1';
+        if (evening)
+            dose[4] = '1';
+        return new String(dose);
+    }
+
     public long getPrimary_key() {
         return primary_key;
     }
