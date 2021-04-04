@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -119,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         constraintLayout.setVisibility(View.INVISIBLE);
                         patientID.setText("");
+                        Snackbar.make(view, "Medicine Prescribed to the Patient!", Snackbar.LENGTH_LONG).show();
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 });
@@ -137,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
     }
 
     @Override

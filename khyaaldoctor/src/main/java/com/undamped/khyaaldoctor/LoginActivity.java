@@ -57,16 +57,13 @@ public class LoginActivity extends AppCompatActivity {
                 Snackbar.make(view, "Please fill all the fields", Snackbar.LENGTH_LONG).show();
             else {
                 loginProgressBar.setVisibility(View.VISIBLE);
-                mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
-                        } else {
-                            Snackbar.make(view, "There was an error. Please try again!", Snackbar.LENGTH_LONG).show();
-                            loginProgressBar.setVisibility(View.INVISIBLE);
-                        }
+                mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        Snackbar.make(view, "There was an error. Please try again!", Snackbar.LENGTH_LONG).show();
+                        loginProgressBar.setVisibility(View.INVISIBLE);
                     }
                 });
             }
