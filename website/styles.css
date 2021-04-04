@@ -47,6 +47,11 @@ body {
 }
 
 .content {
-	font-family: 'Londrina Solid', cursive;
+	font-family: "Londrina Solid", cursive;
 	font-size: 30px;
+}
+
+.breakspaces {
+	display: block;
+	height: 40px;
 }
