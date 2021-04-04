@@ -41,20 +41,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
 
-        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users");
-        mRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                NAME = snapshot.child("Name").getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getApplicationContext(), "Error in retrieving data", Toast.LENGTH_LONG).show();
-                Log.e("Error: MainActivity", error.getMessage());
-            }
-        });
-
         scanFloatingBtn.setOnClickListener(view -> {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_frame, new ScanFragment()).commit();
         });
@@ -85,6 +71,20 @@ public class MainActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
+        } else {
+            DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users");
+            mRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    NAME = snapshot.child("Name").getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getApplicationContext(), "Error in retrieving data", Toast.LENGTH_LONG).show();
+                    Log.e("Error: MainActivity", error.getMessage());
+                }
+            });
         }
     }
 

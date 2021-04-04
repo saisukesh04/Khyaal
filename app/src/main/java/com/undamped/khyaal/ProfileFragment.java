@@ -1,5 +1,6 @@
 package com.undamped.khyaal;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -58,6 +60,15 @@ public class ProfileFragment extends Fragment {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+
+        logout_btn.setOnClickListener(view -> {
+            mAuth.signOut();
+            Snackbar.make(view, "Successfully Signed out", Snackbar.LENGTH_LONG).show();
+            Intent logoutIntent = new Intent(getContext(), LoginActivity.class);
+            logoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(logoutIntent);
+            getActivity().finish();
+        });
 
         return root;
     }
